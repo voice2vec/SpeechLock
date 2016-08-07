@@ -38,7 +38,7 @@ class NeuralNetwork:
 
         train_output = ReshapeLayer(output_dense, (-1, 3, num_units))
 
-        to_vector = ReshapeLayer(nn, (-1, 1, num_units))
+        to_vector = ReshapeLayer(train_output, (-1, 1, num_units))
 
         # предсказание нейронки (theano-преобразование)
         train_predicted = get_output(train_output)  # for loss
