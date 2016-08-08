@@ -27,17 +27,30 @@ class Users():
         ''' Поскольку это не стандартная DB тут нужна функция сохранения. '''
         dill.dump(self.base, open(self.path, 'wb'))
 
-    def get_train(self):
+    def get_train(self, shape = (100,20)):
         ''' Делаем из данных train выборку '''
         train = []
         for key in self.base.keys():
             if len(self.base[key]) >= 2:
                 for _ in range(0, len(self.base[key]), 2):
                     values = choice(list(self.base[key]), 2)
+
+                    a = np.asarray(self.base[key][values[0]])
+                    b = np.asarray(self.base[key][values[1]])
+
                     other = choice(list(self.base), 1)[0]
-                    other_value = choice(list(self.base[other]), 1)[0]
-                    train.append((key, self.base[key][values[0]],
-                                  other, self.base[other][other_value], key, self.base[key][values[1]]))
+                    c = np.asarray(self.base[other][choice(list(self.base[other]), 1)[0]])
+                    
+                    other_value = c.copy()
+                    value_first = a.copy()
+                    value_second = b.copy()
+                    
+                    other_value.resize(shape)
+                    value_first.resize(shape)
+                    value_second.resize(shape)
+                   
+                    train.append((value_first,
+                            other_value, value_second))
 
         return train
 
@@ -52,17 +65,21 @@ class Users():
             for _ in range(0, len(self.base[user]), 2):
                 values = choice(list(self.base[user]), 2)
                 
-                value_first = np.asarray(self.base[user][values[0]])
-                value_second = np.asarray(self.base[user][values[1]]
+                a = np.asarray(self.base[user][values[0]])
+                b = np.asarray(self.base[user][values[1]])
                 
-                other = choice(list(self.base), 1)[0]
-                other_value = np.asarray(self.base[other][choice(list(self.base[other]), 1)[0]])
+                other = choice(list(self.base), 1)
+                c = np.asarray(self.base[other][choice(list(self.base[other]), 1)[0]])
                 
-                np.resize(other_value, shape)
-                np.resize(value_first, shape)
-                np.resize(value_second, shape)
+                value_first = a.copy()
+                value_second = b.copy()
+                other_value = c.copy()
+                
+                other_value.resize(shape)
+                value_first.resize(shape)
+                value_second.resize(shape)
                                           
-                train.append((user, value_first,
-                              other, other_value, user, value_second))
+                train.append((value_first,
+                              other_value, value_second))
         else:
             raise ValueError
