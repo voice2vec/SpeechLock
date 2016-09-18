@@ -1,6 +1,7 @@
-from neural.model import NeuralNetwork
-from data_utils.data import Users
 from flask import Flask, render_template
+from neural.model import NeuralNetwork
+
+from speech2vec.data_utils.data import Users
 
 # Загрузим модель
 our_network = NeuralNetwork()
