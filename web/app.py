@@ -1,16 +1,16 @@
 from flask import Flask, render_template
-from neural.model import NeuralNetwork
 
-from speech2vec.data_utils.data import Users
+from voice2vec.neural import NeuralNetwork
+from voice2vec.data import VoicesData
 
 # Загрузим модель
 our_network = NeuralNetwork()
 
 # Загрузим данные
-data = Users()
+data = VoicesData()
 
 # Обучимся
-our_network.train(data.get_train())
+our_network.fit(data.get_train())
 
 vectors_x = []
 vectors_y = []

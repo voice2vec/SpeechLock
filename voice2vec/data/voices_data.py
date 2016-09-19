@@ -1,22 +1,14 @@
 import dill
-from numpy.random import choice
-from librosa import load, logamplitude
-from librosa.feature import melspectrogram
 import numpy as np
+from numpy.random import choice
+
+from voice2vec.data.spectograms import get_spectrogram
 
 
-def get_spectgorgamm(path):
-    '''Строим спектограмму из wav файла'''
-    y, sr = load(path)
-    S = melspectrogram(y, sr=sr, n_mels=100)
-    log_S = logamplitude(S, ref_power=np.max)
-    return log_S
-
-
-class Users():
-    def __init__(self):
+class VoicesData:
+    def __init__(self, path='users.dl'):
         # Путь до dill модели
-        self.path = 'users.dl'
+        self.path = path
         # Defaultdict информации
         self.base = dill.load(open(self.path, 'rb'))
 
@@ -24,11 +16,11 @@ class Users():
         return self.base[item]
 
     def save(self):
-        ''' Поскольку это не стандартная DB тут нужна функция сохранения. '''
+        """Поскольку это не стандартная DB, тут нужна функция сохранения"""
         dill.dump(self.base, open(self.path, 'wb'))
 
     def get_train(self, shape=(100, 20)):
-        ''' Делаем из данных train выборку '''
+        """Делаем из данных train выборку"""
         train = []
         for key in self.base.keys():
             if len(self.base[key]) >= 2:
@@ -49,17 +41,16 @@ class Users():
                     value_first.resize(shape)
                     value_second.resize(shape)
 
-                    train.append((value_first,
-                                  other_value, value_second))
+                    train.append((value_first, other_value, value_second))
 
         return train
 
     def add_wav(self, user, word):
-        '''Сохраняем спектограму для пользователя'''
-        self.base[user][word] = get_spectgorgamm('/tmp/file.wav')
+        """Сохраняем спектограму для пользователя"""
+        self.base[user][word] = get_spectrogram('/tmp/voice2vec-data-add_wav-tempfile.wav')
 
     def get_train_for_user(self, user, shape=(100, 20)):
-        ''' Трейн данные для одного пользователя '''
+        """Трейн данные для одного пользователя"""
         train = []
         if len(self.base[user]) >= 2:
             for _ in range(0, len(self.base[user]), 2):
@@ -79,7 +70,6 @@ class Users():
                 value_first.resize(shape)
                 value_second.resize(shape)
 
-                train.append((value_first,
-                              other_value, value_second))
+                train.append((value_first, other_value, value_second))
         else:
             raise ValueError
