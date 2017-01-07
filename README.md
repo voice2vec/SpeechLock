@@ -1,4 +1,4 @@
-# SpeechLock
+# SpeechLock (It's old version of project. New version is [here](https://github.com/s-pecher/voice2vec))
 ## Преобразование голоса ввектор
 [![Code Climate](https://codeclimate.com/github/xenx/speech/badges/gpa.svg)](https://codeclimate.com/github/xenx/speech)
 [![Code Health](https://landscape.io/github/xenx/speech/master/landscape.svg?style=flat)](https://landscape.io/github/xenx/speech/master)
